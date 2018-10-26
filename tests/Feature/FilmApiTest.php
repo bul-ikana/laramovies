@@ -95,4 +95,25 @@ class FilmApiTest extends TestCase
             ->assertStatus(200)
             ;
     }
+
+    public function testCreateNewFilm () {
+        $f1 = factory(Film::class)->raw();
+
+        $response = $this->post(
+            'api/films',
+            $f1,
+            ["Accept" => "application/json"]
+        );
+
+        $response
+            ->assertJsonFragment(['name'         =>  $f1['name']])
+            ->assertJsonFragment(['description'  =>  $f1['description']])
+            ->assertStatus(201)
+            ;
+
+        $this->assertDatabaseHas('films', [
+            'name'         =>  $f1['name'],
+            'description'  =>  $f1['description']
+        ]);
+    }
 }
