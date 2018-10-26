@@ -1,0 +1,15 @@
+img {
+    margin: 30px 0;
+    max-height: 256px;
+    max-width: 256px;
+}
+
+.list-group-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.list-group-item a{
+    color: #333;
+}
