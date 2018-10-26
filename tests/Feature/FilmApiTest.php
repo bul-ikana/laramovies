@@ -12,6 +12,8 @@ use App\Comment;
 
 class FilmApiTest extends TestCase
 {
+    use WithFaker, RefreshDatabase;
+
     public function testIndexRouteGetsNewestFilmAnd () {
         $f1 = factory(Film::class)->create();
         sleep(1);
@@ -114,6 +116,36 @@ class FilmApiTest extends TestCase
         $this->assertDatabaseHas('films', [
             'name'         =>  $f1['name'],
             'description'  =>  $f1['description']
+        ]);
+    }
+
+    public function testUpdateFilm () {
+        $f1 = factory(Film::class)->create();
+        $nDes = $this->faker->realText(500);
+        $nRel = $this->faker->date();
+        $nRat = $this->faker->numberBetween(1,5);
+
+        $response = $this->put(
+            'api/films/' . $f1->slug,
+            [
+                'description'   =>  $nDes,
+                'release_date'  =>  $nRel,
+                'rating'        =>  $nRat,
+            ],
+            ["Accept" => "application/json"]
+        );
+
+        $response
+            ->assertJsonFragment(['description'     =>  $nDes])
+            ->assertJsonFragment(['release_date'    =>  $nRel])
+            ->assertJsonFragment(['rating'          =>  $nRat])
+            ->assertStatus(200)
+            ;
+
+        $this->assertDatabaseHas('films', [
+            'description'     =>  $nDes,
+            'release_date'    =>  $nRel,
+            'rating'          =>  $nRat,
         ]);
     }
 }
