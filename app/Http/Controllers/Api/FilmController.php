@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\CreateFilmRequest;
+
 use App\Film;
 
 class FilmController extends Controller
@@ -28,9 +30,16 @@ class FilmController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateFilmRequest $request)
     {
-        //
+        $film = new Film;
+        $film->fill($request->all());
+        $film->slug = str_slug($request->input('name'));
+        if ($film->save()) {
+            return response()->json($film, 201);
+        } else {
+            abort(500);
+        }
     }
 
     /**
