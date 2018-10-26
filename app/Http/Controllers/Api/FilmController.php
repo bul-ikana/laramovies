@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Http\Requests\CreateFilmRequest;
+use App\Http\Requests\UpdateFilmRequest;
 
 use App\Film;
 
@@ -35,7 +36,7 @@ class FilmController extends Controller
         $film = new Film;
         $film->fill($request->all());
         $film->slug = str_slug($request->input('name'));
-        if ($film->save()) {
+        if ( $film->save() ) {
             return response()->json($film, 201);
         } else {
             abort(500);
@@ -68,9 +69,20 @@ class FilmController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $slug)
+    public function update(UpdateFilmRequest $request, $slug)
     {
-        //
+        $film = Film::where('slug', $slug)->first();
+        if ($film) {
+            $film->fill($request->all());
+            $film->slug = str_slug($request->input('name'));
+            if ( $film->save() ) {
+                return response()->json($film);
+            } else {
+                abort(500);
+            }
+        } else {
+            abort(404);
+        }
     }
 
     /**
