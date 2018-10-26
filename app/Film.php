@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Film extends Model
 {
+    protected $fillable = [
+        'name',
+        'description',
+        'release_date',
+        'rating',
+        'ticket_price',
+        'country',
+        'photo'
+    ];
+
     public function genres () {
         return $this->belongsToMany(Genre::class);
     }
