@@ -41,8 +41,15 @@ class FilmController extends Controller
      */
     public function show($slug)
     {
-        $film = Film::where('slug', $slug)->first();
-        return response()->json($film);
+        $data = [];
+        $data['last_film'] = Film::with('genres')
+            ->with('comments')
+            ->where('slug', $slug)
+            ->first();
+
+        $data['all_films'] = Film::orderBy('created_at', 'desc')->pluck('name', 'slug')->all();
+
+        return response()->json($data);
     }
 
     /**
