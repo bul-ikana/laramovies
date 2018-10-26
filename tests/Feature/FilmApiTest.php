@@ -148,4 +148,20 @@ class FilmApiTest extends TestCase
             'rating'          =>  $nRat,
         ]);
     }
+
+    public function testDeleteFilm () {
+        $f1 = factory(Film::class)->create();
+
+        $response = $this->delete(
+            'api/films/' . $f1->slug,
+            ["Accept" => "application/json"]
+        );
+
+        $response->assertStatus(204);
+
+        $this->assertDatabaseMissing('films', [
+            'name'         =>  $f1['name'],
+            'description'  =>  $f1['description']
+        ]);
+    }
 }
