@@ -10,8 +10,8 @@ img {
     text-overflow: ellipsis;
 }
 
-.list-group-item a{
-    color: #333;
+a {
+    color: #212529 !important;
 }
 
 /* Spinner */

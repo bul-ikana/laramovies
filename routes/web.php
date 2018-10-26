@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/films', 'Filmcontroller@index');
+Route::get('/films/{slug}', 'Filmcontroller@show');

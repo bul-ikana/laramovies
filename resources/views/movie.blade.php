@@ -27,7 +27,7 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript">
             axios
-                .get('{{ url("/api/films") }}')
+                .get('{{ url("/api/films") }}{{ !empty($slug) ? '/' . $slug : '' }}')
                 .then( function (response) {
                     console.log(response.data)
 

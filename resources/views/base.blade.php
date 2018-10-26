@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="jumbotron">
-      <h1 class="display-4 text-center">Laramovies</h1>
+      <h1 class="display-4 text-center"><a href="{{  url('/') }}">Laramovies</a></h1>
       <p class="lead text-center">A simple website to talk about movies. Love them or hate them!</p>
     </div>
 
