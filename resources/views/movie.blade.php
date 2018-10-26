@@ -21,11 +21,7 @@
         </div>
         <div class="col-md-4">
             <h4>List of movies:</h4>
-            <ul class="list-group">
-                <li class="list-group-item"><a href="#">Cricket</a></li>
-                <li class="list-group-item"><a href="#">Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro.</a></li>
-                <li class="list-group-item"><a href="#">Brucks</a></li>
-            </ul>
+            <ul class="list-group" id="movie-list"> </ul>
         </div>
 
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -48,6 +44,19 @@
                     document.getElementById("genre_title").innerHTML = response.data.last_film.genres.length ? response.data.last_film.genres.length > 1 ? "Genres:" : "Genre:" : ''
                     document.getElementById("genre").innerHTML = response.data.last_film.genres.map(x => x.name).join(', ')
 
+                    var ul = document.getElementById("movie-list")
+                    var all_films = response.data.all_films
+                    for (movie in all_films) {
+                        var li = document.createElement('li')
+                        li.setAttribute('class', 'list-group-item');
+
+                        var a = document.createElement('a')
+                        a.href = "{{ url("/films/") }}/" + movie
+                        a.innerHTML = all_films[movie]
+
+                        li.appendChild(a)
+                        ul.appendChild(li)
+                    }
                 })
         </script>
 
