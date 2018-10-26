@@ -93,6 +93,12 @@ class FilmController extends Controller
      */
     public function destroy($slug)
     {
-        //
+        $film = Film::where('slug', $slug)->first();
+        if ($film) {
+            $film->delete();
+            return response('', 204);
+        } else {
+            abort(404);
+        }
     }
 }
