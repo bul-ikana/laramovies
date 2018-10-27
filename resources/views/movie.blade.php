@@ -22,9 +22,10 @@
         <div class="col-md-4">
             <h4>List of movies:</h4>
             <ul class="list-group" id="movie-list"> </ul>
+            <br>
+            <a href="{{ route('create') }}" class="btn btn-secondary btn-block">Add a movie!</a>
         </div>
 
-        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <script type="text/javascript">
             axios
                 .get('{{ url("/api/films") }}{{ !empty($slug) ? '/' . $slug : '' }}')

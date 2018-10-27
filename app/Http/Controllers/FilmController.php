@@ -13,4 +13,8 @@ class FilmController extends Controller
     public function show ($slug) {
         return view('movie', ['slug' => $slug]);
     }
+
+    public function create () {
+        return view('create');
+    }
 }
