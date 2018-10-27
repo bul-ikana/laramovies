@@ -20,10 +20,45 @@
             <p><strong id="genre_title"></strong> <span id="genre">t</span></p>
         </div>
         <div class="col-md-4">
-            <h4>List of movies:</h4>
-            <ul class="list-group" id="movie-list"> </ul>
-            <br>
-            <a href="{{ route('create') }}" class="btn btn-secondary btn-block">Add a movie!</a>
+
+                <ul class="navbar-nav ml-auto auth-ul">
+                    <!-- Authentication Links -->
+                    @guest
+                        <li class="nav-item btn btn-outline-secondary btn-sm btn-auth float-right">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        <li class="nav-item btn btn-outline-secondary btn-sm btn-auth float-right">
+                            @if (Route::has('register'))
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            @endif
+                        </li>
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-right" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+
+            <div>
+                <h4>List of movies:</h4>
+                <ul class="list-group" id="movie-list"> </ul>
+                <br>
+                <a href="{{ route('create') }}" class="btn btn-secondary btn-block">Add a movie!</a>
+            </div>
         </div>
 
         <script type="text/javascript">
