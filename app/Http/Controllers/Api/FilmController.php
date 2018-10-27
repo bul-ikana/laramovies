@@ -9,6 +9,7 @@ use App\Http\Requests\CreateFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
 
 use App\Film;
+use App\Comment;
 
 class FilmController extends Controller
 {
@@ -20,7 +21,12 @@ class FilmController extends Controller
     public function index()
     {
         $data = [];
-        $data['last_film'] = Film::with('genres')->with('comments')->latest()->first();
+        $data['last_film'] = Film::with('genres')
+            ->with('comments')
+            ->with('comments.user')
+            ->latest()
+            ->first();
+
         $data['all_films'] = Film::orderBy('created_at', 'desc')->pluck('name', 'slug')->all();
         return response()->json($data);
     }
@@ -54,6 +60,7 @@ class FilmController extends Controller
         $data = [];
         $data['last_film'] = Film::with('genres')
             ->with('comments')
+            ->with('comments.user')
             ->where('slug', $slug)
             ->first();
 
@@ -97,6 +104,24 @@ class FilmController extends Controller
         if ($film) {
             $film->delete();
             return response('', 204);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function comment (Request $request, $id) {
+        $film = Film::find($id);
+
+        if ($film) {
+            $comment = $film->comments()->with('user')->create([
+                'name'      =>  $request->input('name'),
+                'comment'   =>  $request->input('comment'),
+                'user_id'   =>  $request->input('user_id'),
+            ]);
+
+            $data = Comment::with('user')->find($comment->id);
+
+            return response()->json($data, 201);
         } else {
             abort(404);
         }

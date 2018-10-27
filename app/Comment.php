@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    protected $fillable = [
+        'name', 'comment', 'user_id'
+    ];
+
     public function film () {
         return $this->belongsTo(Film::class);
     }

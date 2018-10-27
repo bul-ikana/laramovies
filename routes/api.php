@@ -21,5 +21,8 @@ Route::group(
         Route::get('/films/{slug}', 'Api\FilmController@show');
         Route::put('/films/{slug}', 'Api\FilmController@update');
         Route::delete('/films/{slug}', 'Api\FilmController@destroy');
+
+        // Comments
+        Route::post('/films/{id}/comments', 'Api\FilmController@comment');
     }
 );
