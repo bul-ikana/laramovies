@@ -18,6 +18,10 @@
             <p><strong>Ticket price:</strong> $<span id="ticket_price"></span></p>
             <p><strong>Country:</strong> <span id="country"></span></p>
             <p><strong id="genre_title"></strong> <span id="genre">t</span></p>
+
+            <hr>
+
+            <div id="comments"> </div>
         </div>
         <div class="col-md-4">
 
@@ -67,6 +71,7 @@
                 .then( function (response) {
                     console.log(response.data)
 
+                    // Movie data
                     document.getElementById("spinner").style.display = 'none'
                     document.getElementById("content").style.display = 'flex'
                     document.getElementById("name").innerHTML = response.data.last_film.name
@@ -80,6 +85,7 @@
                     document.getElementById("genre_title").innerHTML = response.data.last_film.genres.length ? response.data.last_film.genres.length > 1 ? "Genres:" : "Genre:" : ''
                     document.getElementById("genre").innerHTML = response.data.last_film.genres.map(x => x.name).join(', ')
 
+                    // Movie list
                     var ul = document.getElementById("movie-list")
                     var all_films = response.data.all_films
                     for (movie in all_films) {
@@ -92,6 +98,33 @@
 
                         li.appendChild(a)
                         ul.appendChild(li)
+                    }
+
+                    // Comments
+                    var commentsdiv = document.getElementById("comments")
+                    var comments = response.data.last_film.comments
+
+                    for (comment in comments) {
+                        var div = document.createElement('div')
+
+                        var h4 = document.createElement('h4')
+
+                        var small = document.createElement('small')
+                        small.setAttribute('class', 'author')
+                        small.innerHTML = "By: " + comments[comment].user.name
+
+                        var p = document.createElement('p')
+                        p.innerHTML = comments[comment].comment
+
+                        var hr = document.createElement('hr')
+
+                        h4.innerHTML = comments[comment].name
+
+                        div.appendChild(h4)
+                        div.appendChild(small)
+                        div.appendChild(p)
+                        commentsdiv.appendChild(div)
+                        commentsdiv.appendChild(hr)
                     }
                 })
         </script>

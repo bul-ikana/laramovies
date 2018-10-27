@@ -20,7 +20,12 @@ class FilmController extends Controller
     public function index()
     {
         $data = [];
-        $data['last_film'] = Film::with('genres')->with('comments')->latest()->first();
+        $data['last_film'] = Film::with('genres')
+            ->with('comments')
+            ->with('comments.user')
+            ->latest()
+            ->first();
+
         $data['all_films'] = Film::orderBy('created_at', 'desc')->pluck('name', 'slug')->all();
         return response()->json($data);
     }
@@ -54,6 +59,7 @@ class FilmController extends Controller
         $data = [];
         $data['last_film'] = Film::with('genres')
             ->with('comments')
+            ->with('comments.user')
             ->where('slug', $slug)
             ->first();
 

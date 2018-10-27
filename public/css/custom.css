@@ -31,6 +31,10 @@ form {
     padding: 0;
 }
 
+.author {
+    display: inline-block;
+    margin-bottom: 10px;
+}
 /* Spinner */
 
 .spinner {
