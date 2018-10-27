@@ -22,6 +22,23 @@
             <hr>
 
             <div id="comments"> </div>
+
+            @auth
+                <h4>Leave a comment:</h4>
+                <form id="comment-form" onsubmit="event.preventDefault(); commentSubmit();">
+                    <div class="form-group">
+                      <input required type="text" class="form-control" id="name" name="name" aria-describedby="name-help" placeholder="Title">
+                    </div>
+
+                    <div class="form-group">
+                      <input required type="text" class="form-control" id="comment" name="comment" aria-describedby="comment-help" placeholder="Comment">
+                    </div>
+
+                    <input type="hidden" name="user_id" value="{{ \Auth::id() }}">
+
+                    <button  id="btn-submit" type="submit" class="btn btn-secondary">Submit!</button>
+                </form>
+            @endauth
         </div>
         <div class="col-md-4">
 
@@ -66,10 +83,13 @@
         </div>
 
         <script type="text/javascript">
+            var film_id = 0;
             axios
                 .get('{{ url("/api/films") }}{{ !empty($slug) ? '/' . $slug : '' }}')
                 .then( function (response) {
                     console.log(response.data)
+
+                    film_id = response.data.last_film.id
 
                     // Movie data
                     document.getElementById("spinner").style.display = 'none'
@@ -127,6 +147,39 @@
                         commentsdiv.appendChild(hr)
                     }
                 })
+
+            function commentSubmit () {
+                document.getElementById('btn-submit').innerHTML = "Saving..."
+                formdata = new FormData(document.getElementById('comment-form'));
+                axios
+                  .post('{{ url('/api/films') }}/' + film_id + '/comments', formdata)
+                  .then(function (response) {
+                        var commentsdiv = document.getElementById("comments")
+                        var div = document.createElement('div')
+
+                        var h4 = document.createElement('h4')
+
+                        var small = document.createElement('small')
+                        small.setAttribute('class', 'author')
+                        small.innerHTML = "By: " + response.data.user.name
+
+                        var p = document.createElement('p')
+                        p.innerHTML = response.data.comment
+
+                        var hr = document.createElement('hr')
+
+                        h4.innerHTML = response.data.name
+
+                        div.appendChild(h4)
+                        div.appendChild(small)
+                        div.appendChild(p)
+                        commentsdiv.appendChild(div)
+                        commentsdiv.appendChild(hr)
+
+                        document.getElementById('btn-submit').innerHTML = "Submit!"
+                        document.getElementById('comment-form').reset()
+                  })
+            }
         </script>
 
     </div>

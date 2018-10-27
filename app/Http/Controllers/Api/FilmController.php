@@ -9,6 +9,7 @@ use App\Http\Requests\CreateFilmRequest;
 use App\Http\Requests\UpdateFilmRequest;
 
 use App\Film;
+use App\Comment;
 
 class FilmController extends Controller
 {
@@ -103,6 +104,24 @@ class FilmController extends Controller
         if ($film) {
             $film->delete();
             return response('', 204);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function comment (Request $request, $id) {
+        $film = Film::find($id);
+
+        if ($film) {
+            $comment = $film->comments()->with('user')->create([
+                'name'      =>  $request->input('name'),
+                'comment'   =>  $request->input('comment'),
+                'user_id'   =>  $request->input('user_id'),
+            ]);
+
+            $data = Comment::with('user')->find($comment->id);
+
+            return response()->json($data, 201);
         } else {
             abort(404);
         }
